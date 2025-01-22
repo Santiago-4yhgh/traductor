@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traductor Basico</title>
+    <script type="text/javascript">
+
+        function enviarValoresServidor() {
+            var palabra = document.getElementById("entrada").value;
+
+            // Validamos que no este vacio y que contenga solo letras minúsculas
+            if (palabra.length > 0) {
+                if (/^[a-z]+$/.test(palabra)) { // Solo letras minusculas
+                    conexion = new XMLHttpRequest();
+                    conexion.onreadystatechange = esperaResultado;
+                    conexion.open("POST", "traducir.php", true);
+                    conexion.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    conexion.send("palabra_ingles=" + palabra);
+                } else {
+                    alert("¡Solo se permiten letras minusculas!");
+                }
+            } else {
+                alert("¡Ingresa una palabra a traducir!");
+            }
+
+            function esperaResultado() {
+                if (conexion.readyState === 4) {
+                    var resultado = conexion.responseText;
+                    document.getElementById("salida").value = resultado;
+                }
+            }
+        }
+
+        // Funcion para limpiar las cajas de texto
+        function limpiarCajas() {
+            document.getElementById("entrada").value = "";
+            document.getElementById("salida").value = "";
+        }
+    </script>
+</head>
+<body>
+    <h1>Traductor</h1>
+    Palabras disponibles: 
+    help,sun,water,dog,car,sky,tree,house,chair,love
+    
+    
+    
+    
+    
+    
+     <br>
+    <br><br>
+    <label for="entrada">Ingrese la palabra en ingles:</label><br>
+    <input type="text" id="entrada" name="entrada" required><br><br>
+    <button type="button" onclick="enviarValoresServidor()">Traducir</button>
+    <button type="button" onclick="limpiarCajas()">Limpiar</button><br><br>
+    <label for="salida">Traduccion:</label><br>
+    <input type="text" id="salida" name="salida" readonly><br>
+</body>
+</html>
